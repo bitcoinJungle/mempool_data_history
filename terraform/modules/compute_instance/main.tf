@@ -29,6 +29,7 @@ resource "google_compute_instance" "bitcoin_jungle_node" {
       PROJECT_ID  = var.project_id,
       TOPIC_ID    = var.pubsub_topic_name,
       BUCKET_NAME = var.infra_scripts_bucket_name
+      HOSTNAME    = "GCP_BitcoinJungle"
     })
   }
 

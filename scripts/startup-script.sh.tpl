@@ -120,7 +120,8 @@ Requires=bitcoind.service
 Type=simple
 User=bitcoin
 Environment=PROJECT_ID=${PROJECT_ID}
-Environment=TOPIC_ID=${TOPIC_ID}
+Environment=BUCKET_NAME=${BUCKET_NAME}
+Environment=HOSTNAME=${HOSTNAME}
 WorkingDirectory=/home/bitcoin/project
 ExecStart=/home/bitcoin/project/venv/bin/python mempool_to_avrofiles_watcher.py
 Restart=on-failure
