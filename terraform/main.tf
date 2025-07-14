@@ -14,13 +14,14 @@ provider "google" {
 
 # Storage buckets and scripts
 module "buckets" {
-  source                        = "./modules/buckets"
-  scripts_bucket_name           = var.scripts_bucket_name
-  bucket_name                   = var.bucket_name
-  bucket_location               = var.bucket_location
-  mempool_watcher_script_source = "${path.module}/../scripts/mempool_watcher.py"
-  avro_file_dir                 = var.avro_file_dir
-  service_account_email         = var.service_account_email
+  source                                     = "./modules/buckets"
+  scripts_bucket_name                        = var.scripts_bucket_name
+  bucket_name                                = var.bucket_name
+  bucket_location                            = var.bucket_location
+  mempool_watcher_script_source              = "${path.module}/../scripts/mempool_watcher.py"
+  mempool_to_avrofiles_watcher_script_source = "${path.module}/../scripts/mempool_to_avrofiles_watcher.py"
+  avro_file_dir                              = var.avro_file_dir
+  service_account_email                      = var.service_account_email
 }
 
 # BigQuery resources
@@ -76,6 +77,7 @@ module "compute_instance" {
   ]
   depends_on = [
     module.buckets.mempool_watcher_script_dependency,
+    module.buckets.mempool_avro_watcher_script_dependency,
     module.buckets.vm_can_read_scripts_dependency,
     module.pubsub.vm_can_publish_dependency
   ]

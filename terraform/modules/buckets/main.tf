@@ -23,6 +23,12 @@ resource "google_storage_bucket_object" "mempool_watcher_script" {
   source = var.mempool_watcher_script_source
 }
 
+resource "google_storage_bucket_object" "mempool_avro_watcher_script" {
+  name   = "scripts/mempool_to_avrofiles_watcher.py"
+  bucket = google_storage_bucket.infra_scripts_bucket.name
+  source = var.mempool_to_avrofiles_watcher_script_source
+}
+
 resource "google_storage_bucket_iam_member" "vm_can_read_scripts" {
   bucket = google_storage_bucket.infra_scripts_bucket.name
   role   = "roles/storage.objectViewer"

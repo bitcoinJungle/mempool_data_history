@@ -79,7 +79,7 @@ resource "google_bigquery_data_transfer_config" "deduplication_tx" {
   depends_on = [var.iam_binding_dependency]
 }
 
-resource "google_bigquery_data_transfer_config" "update_bloclevel_tx" {
+resource "google_bigquery_data_transfer_config" "standard_blocklevel_update" {
   display_name           = "Update bloclevel_tx with blockchain data"
   data_source_id         = "scheduled_query"
   destination_dataset_id = var.bq_dataset_id
@@ -88,7 +88,47 @@ resource "google_bigquery_data_transfer_config" "update_bloclevel_tx" {
   schedule               = "every day 04:00"
 
   params = {
-    query = templatefile("${path.module}/../../../queries/update_bloclevel_tx.sql.tpl", {
+    query = templatefile("${path.module}/../../../queries/standard_blocklevel_update.sql.tpl", {
+      project_id      = var.project_id,
+      dataset_id      = var.bq_dataset_id,
+      bloclevel_table = google_bigquery_table.bloclevel_tx.table_id
+    })
+  }
+
+  service_account_name = var.service_account_email
+  depends_on = [var.iam_binding_dependency]
+}
+
+resource "google_bigquery_data_transfer_config" "extended_blocklevel_update" {
+  display_name           = "Extended update bloclevel_tx with blockchain data"
+  data_source_id         = "scheduled_query"
+  destination_dataset_id = var.bq_dataset_id
+  location               = var.bq_location
+  project                = var.project_id
+  schedule               = "every day 06:00"
+
+  params = {
+    query = templatefile("${path.module}/../../../queries/extended_blocklevel_update.sql.tpl", {
+      project_id      = var.project_id,
+      dataset_id      = var.bq_dataset_id,
+      bloclevel_table = google_bigquery_table.bloclevel_tx.table_id
+    })
+  }
+
+  service_account_name = var.service_account_email
+  depends_on = [var.iam_binding_dependency]
+}
+
+resource "google_bigquery_data_transfer_config" "longtail_blocklevel_update" {
+  display_name           = "Longtailed update bloclevel_tx with blockchain data"
+  data_source_id         = "scheduled_query"
+  destination_dataset_id = var.bq_dataset_id
+  location               = var.bq_location
+  project                = var.project_id
+  schedule               = "every day 09:00"
+
+  params = {
+    query = templatefile("${path.module}/../../../queries/longtail_blocklevel_update.sql.tpl", {
       project_id      = var.project_id,
       dataset_id      = var.bq_dataset_id,
       bloclevel_table = google_bigquery_table.bloclevel_tx.table_id

@@ -18,6 +18,11 @@ variable "mempool_watcher_script_source" {
   type        = string
 }
 
+variable "mempool_to_avrofiles_watcher_script_source" {
+  description = "Local path to the mempool_to_avrofiles_watcher.py script"
+  type        = string
+}
+
 variable "avro_file_dir" {
   description = "Path to the directory containing AVRO files"
   type        = string

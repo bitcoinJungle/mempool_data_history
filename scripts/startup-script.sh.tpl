@@ -66,7 +66,9 @@ EOF
 # ----------------------------------------
 sudo -u bitcoin python3 -m venv /home/bitcoin/project/venv
 sudo -u bitcoin /home/bitcoin/project/venv/bin/python -m pip install --quiet --upgrade pip
-sudo -u bitcoin /home/bitcoin/project/venv/bin/python -m pip install --quiet google-cloud-pubsub fastavro google-cloud-storage
+sudo -u bitcoin /home/bitcoin/project/venv/bin/python -m pip install --quiet google-cloud-pubsub
+# Require for mempool_to_avrofiles_watcher : 
+sudo -u bitcoin /home/bitcoin/project/venv/bin/python -m pip install --quiet fastavro google-cloud-storage
 
 # ----------------------------------------
 # Download mempool_watcher.py from GCS
@@ -75,9 +77,9 @@ gsutil cp gs://${BUCKET_NAME}/scripts/mempool_watcher.py /home/bitcoin/project/m
 chown bitcoin:bitcoin /home/bitcoin/project/mempool_watcher.py
 chmod +x /home/bitcoin/project/mempool_watcher.py
 
-# ----------------------------------------
+# ------------------------------------------
 # Create systemd service for mempool watcher
-# ----------------------------------------
+# ------------------------------------------
 cat <<EOF > /etc/systemd/system/mempool-watcher.service
 [Unit]
 Description=Bitcoin mempool watcher (via venv)
@@ -98,6 +100,36 @@ RestartSec=5
 WantedBy=multi-user.target
 EOF
 
+# --------------------------------------------
+# Download mempool-to-avro-watcher.py from GCS
+# --------------------------------------------
+gsutil cp gs://${BUCKET_NAME}/scripts/mempool_to_avrofiles_watcher.py /home/bitcoin/project/mempool_to_avrofiles_watcher.py
+chown bitcoin:bitcoin /home/bitcoin/project/mempool_to_avrofiles_watcher.py
+chmod +x /home/bitcoin/project/mempool_to_avrofiles_watcher.py
+
+# -------------------------------------------------------
+# Create systemd service for mempool to avrofiles watcher
+# -------------------------------------------------------
+cat <<EOF > /etc/systemd/system/mempool-to-avro-watcher.service
+[Unit]
+Description=Bitcoin mempool watcher sending avrofiles to GCP (via venv)
+After=network.target bitcoind.service
+Requires=bitcoind.service
+
+[Service]
+Type=simple
+User=bitcoin
+Environment=PROJECT_ID=${PROJECT_ID}
+Environment=TOPIC_ID=${TOPIC_ID}
+WorkingDirectory=/home/bitcoin/project
+ExecStart=/home/bitcoin/project/venv/bin/python mempool_to_avrofiles_watcher.py
+Restart=on-failure
+RestartSec=5
+
+[Install]
+WantedBy=multi-user.target
+EOF
+
 # ----------------------------------------
 # Enable and start both services
 # ----------------------------------------
@@ -107,4 +139,6 @@ systemctl enable bitcoind
 systemctl start bitcoind
 systemctl enable mempool-watcher
 systemctl start mempool-watcher
+systemctl enable mempool-to-avro-watcher
+systemctl start mempool-to-avro-watcher
 
