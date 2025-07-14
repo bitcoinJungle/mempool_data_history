@@ -1,0 +1,16 @@
+[
+  { "name": "txid",                 "type": "STRING",   "mode": "REQUIRED" },
+  { "name": "first_seen_timestamp", "type": "TIMESTAMP", "mode": "REQUIRED" },
+  { "name": "last_seen_timestamp",  "type": "TIMESTAMP", "mode": "REQUIRED" },
+  { "name": "block_timestamp",      "type": "TIMESTAMP", "mode": "NULLABLE" },
+  { "name": "block_height",         "type": "INTEGER",   "mode": "NULLABLE" },
+  { "name": "size",                 "type": "INTEGER",   "mode": "NULLABLE" },
+  { "name": "virtual_size",         "type": "INTEGER",   "mode": "NULLABLE" },
+  { "name": "output_value",         "type": "INTEGER",   "mode": "NULLABLE" },
+  { "name": "fee",                  "type": "INTEGER",   "mode": "NULLABLE" },
+  { "name": "deduplicated_at",      "type": "TIMESTAMP", "mode": "REQUIRED" },
+  { "name": "aggregated_at",        "type": "TIMESTAMP", "mode": "NULLABLE" },
+  { "name": "modified_at",          "type": "TIMESTAMP", "mode": "REQUIRED" },
+  { "name": "created_at",           "type": "TIMESTAMP", "mode": "REQUIRED" }
+]
+

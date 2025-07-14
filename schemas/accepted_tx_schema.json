@@ -1,0 +1,11 @@
+[
+  { "name": "event_type",     "type": "STRING",    "mode": "REQUIRED" },
+  { "name": "host",           "type": "STRING",    "mode": "REQUIRED" },
+  { "name": "timestamp",      "type": "TIMESTAMP", "mode": "REQUIRED" },
+  { "name": "txhash",         "type": "STRING",    "mode": "REQUIRED" },
+  { "name": "peer_num",       "type": "INTEGER",   "mode": "NULLABLE" },
+  { "name": "pool_size_txns", "type": "INTEGER",   "mode": "NULLABLE" },
+  { "name": "pool_size_kb",   "type": "INTEGER",   "mode": "NULLABLE" },
+  { "name": "source",         "type": "STRING",    "mode": "NULLABLE" },
+  { "name": "dt",             "type": "DATE",      "mode": "NULLABLE" }
+]
