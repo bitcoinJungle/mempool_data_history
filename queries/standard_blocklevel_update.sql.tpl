@@ -20,7 +20,7 @@ WHERE a.block_timestamp IS NULL
   )
   AND a.txid = t.hash
                   --  REPLACE THAT BY A FILTER ON deduplicated_at NOT NULL BUT aggregated_at NULL ? INSTEAD FOR 'RETRIEVED MODE IN CASE OF ISSUE'
-  AND t.block_timestamp BETWEEN TIMESTAMP_SUB(a.last_seen_timestamp, INTERVAL 20 MINUTES) AND TIMESTAMP_ADD(a.last_seen_timestamp, INTERVAL 1 HOUR);
+  AND t.block_timestamp BETWEEN TIMESTAMP_SUB(a.last_seen_timestamp, INTERVAL 20 MINUTE) AND TIMESTAMP_ADD(a.last_seen_timestamp, INTERVAL 1 HOUR);
                   -- Streamlined date range filtering, 
 								  -- standard_blocklevel_update is requesting with TIMESTAMP_ADD(a.last_seen_timestamp, INTERVAL 1 HOUR) first 
                   -- assuming that most of the tx will be added to a bloc in a moment very close to the last_seen_timestamp
