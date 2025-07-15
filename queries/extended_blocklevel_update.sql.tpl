@@ -12,6 +12,7 @@ SET
 FROM `bigquery-public-data.crypto_bitcoin.transactions` t
 WHERE a.block_timestamp IS NULL 
   AND a.aggregated_at IS NULL
+  AND a.replaced_by IS NULL
   AND a.deduplicated_at IS NOT NULL  
   AND DATE(a.last_seen_timestamp) = DATE_SUB(CURRENT_DATE(), INTERVAL 2 DAY)
   AND (

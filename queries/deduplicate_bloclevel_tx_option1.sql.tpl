@@ -12,7 +12,7 @@ USING (
          -- First table: avrofiles source
         SELECT txhash, `timestamp` AS node_timestamp
           FROM ${project_id}.${dataset_id}.${avro_table} e
-         WHERE e.source = "bmon"
+         WHERE e.source IS NOT NULL
           AND dt = DATE_SUB(CURRENT_DATE(), INTERVAL 1 DAY) -- We work on yesterday's data
         
         UNION ALL

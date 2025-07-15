@@ -83,11 +83,30 @@ resource "google_bigquery_data_transfer_config" "deduplication_tx" {
       bloclevel_table    = google_bigquery_table.bloclevel_tx.table_id
       avro_table         = google_bigquery_table.external_avro_table.table_id
     })
-
   }
 
   service_account_name = var.service_account_email
+  depends_on = [var.iam_binding_dependency]
+}
 
+resource "google_bigquery_data_transfer_config" "flag_replaced_transactions" {
+  display_name           = "Update replaced_by into bloclevel_tx"
+  data_source_id         = "scheduled_query"
+  destination_dataset_id = var.bq_dataset_id
+  location               = var.bq_location
+  project                = var.project_id
+  schedule               = "every day 03:30"
+
+  params = {
+    query = templatefile("${path.module}/../../../queries/flag_replaced_transactions.sql.tpl", {
+      project_id         = var.project_id,
+      dataset_id         = var.bq_dataset_id,
+      bloclevel_table    = google_bigquery_table.bloclevel_tx.table_id
+      avro_table         = google_bigquery_table.external_avro_table.table_id
+    })
+  }
+
+  service_account_name = var.service_account_email
   depends_on = [var.iam_binding_dependency]
 }
 

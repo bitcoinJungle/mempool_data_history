@@ -9,7 +9,7 @@ USING (
            CURRENT_TIMESTAMP() AS modified_at,
            CURRENT_TIMESTAMP() AS created_at
     FROM ${project_id}.${dataset_id}.${avro_table} 
-    WHERE source = "bmon"
+    WHERE source IS NOT NULL
       AND dt = DATE_SUB(CURRENT_DATE(), INTERVAL 1 DAY) -- We work on yesterday's data
     GROUP BY txhash
 ) AS source
