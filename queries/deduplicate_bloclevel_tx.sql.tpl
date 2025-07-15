@@ -3,8 +3,8 @@
 MERGE ${project_id}.${dataset_id}.${bloclevel_table} AS target
 USING (
     SELECT txhash AS txid,
-           MIN(node_timestamp) AS first_seen_timestamp,
-           MAX(node_timestamp) AS last_seen_timestamp,
+           MIN(`timestamp`) AS first_seen_timestamp,
+           MAX(`timestamp`) AS last_seen_timestamp,
            CURRENT_TIMESTAMP() AS deduplicated_at,
            CURRENT_TIMESTAMP() AS modified_at,
            CURRENT_TIMESTAMP() AS created_at
