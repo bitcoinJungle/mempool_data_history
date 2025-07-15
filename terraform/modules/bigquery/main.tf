@@ -58,7 +58,7 @@ resource "google_bigquery_table" "bloclevel_tx" {
 }
 
 resource "google_bigquery_data_transfer_config" "deduplication_tx" {
-  display_name           = "Get_unique_tx_into_final_table"
+  display_name           = "Get unique tx into blocLevel table"
   data_source_id         = "scheduled_query"
   destination_dataset_id = var.bq_dataset_id
   location               = var.bq_location
@@ -89,8 +89,8 @@ resource "google_bigquery_data_transfer_config" "deduplication_tx" {
   depends_on = [var.iam_binding_dependency]
 }
 
-resource "google_bigquery_data_transfer_config" "flag_replaced_transactions" {
-  display_name           = "Update replaced_by into bloclevel_tx"
+resource "google_bigquery_data_transfer_config" "flag_replaced_tx" {
+  display_name           = "Update replaced_by into bloclevel_tx table"
   data_source_id         = "scheduled_query"
   destination_dataset_id = var.bq_dataset_id
   location               = var.bq_location
@@ -110,7 +110,7 @@ resource "google_bigquery_data_transfer_config" "flag_replaced_transactions" {
   depends_on = [var.iam_binding_dependency]
 }
 
-resource "google_bigquery_data_transfer_config" "standard_blocklevel_update" {
+resource "google_bigquery_data_transfer_config" "standard_bloclevel_update" {
   display_name           = "Update bloclevel_tx with blockchain data"
   data_source_id         = "scheduled_query"
   destination_dataset_id = var.bq_dataset_id
@@ -119,7 +119,7 @@ resource "google_bigquery_data_transfer_config" "standard_blocklevel_update" {
   schedule               = "every day 07:00"
 
   params = {
-    query = templatefile("${path.module}/../../../queries/standard_blocklevel_update.sql.tpl", {
+    query = templatefile("${path.module}/../../../queries/standard_bloclevel_update.sql.tpl", {
       project_id      = var.project_id,
       dataset_id      = var.bq_dataset_id,
       bloclevel_table = google_bigquery_table.bloclevel_tx.table_id
@@ -130,7 +130,7 @@ resource "google_bigquery_data_transfer_config" "standard_blocklevel_update" {
   depends_on = [var.iam_binding_dependency]
 }
 
-resource "google_bigquery_data_transfer_config" "extended_blocklevel_update" {
+resource "google_bigquery_data_transfer_config" "extended_bloclevel_update" {
   display_name           = "Extended update bloclevel_tx with blockchain data"
   data_source_id         = "scheduled_query"
   destination_dataset_id = var.bq_dataset_id
@@ -139,7 +139,7 @@ resource "google_bigquery_data_transfer_config" "extended_blocklevel_update" {
   schedule               = "every day 10:00"
 
   params = {
-    query = templatefile("${path.module}/../../../queries/extended_blocklevel_update.sql.tpl", {
+    query = templatefile("${path.module}/../../../queries/extended_bloclevel_update.sql.tpl", {
       project_id      = var.project_id,
       dataset_id      = var.bq_dataset_id,
       bloclevel_table = google_bigquery_table.bloclevel_tx.table_id
@@ -150,7 +150,7 @@ resource "google_bigquery_data_transfer_config" "extended_blocklevel_update" {
   depends_on = [var.iam_binding_dependency]
 }
 
-resource "google_bigquery_data_transfer_config" "longtail_blocklevel_update" {
+resource "google_bigquery_data_transfer_config" "longtail_bloclevel_update" {
   display_name           = "Longtailed update bloclevel_tx with blockchain data"
   data_source_id         = "scheduled_query"
   destination_dataset_id = var.bq_dataset_id
@@ -159,7 +159,7 @@ resource "google_bigquery_data_transfer_config" "longtail_blocklevel_update" {
   schedule               = "every day 13:00"
 
   params = {
-    query = templatefile("${path.module}/../../../queries/longtail_blocklevel_update.sql.tpl", {
+    query = templatefile("${path.module}/../../../queries/longtail_bloclevel_update.sql.tpl", {
       project_id      = var.project_id,
       dataset_id      = var.bq_dataset_id,
       bloclevel_table = google_bigquery_table.bloclevel_tx.table_id
