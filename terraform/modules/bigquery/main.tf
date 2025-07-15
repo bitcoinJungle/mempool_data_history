@@ -95,7 +95,7 @@ resource "google_bigquery_data_transfer_config" "flag_replaced_transactions" {
   destination_dataset_id = var.bq_dataset_id
   location               = var.bq_location
   project                = var.project_id
-  schedule               = "every day 03:30"
+  schedule               = "every day 05:00"
 
   params = {
     query = templatefile("${path.module}/../../../queries/flag_replaced_transactions.sql.tpl", {
@@ -116,7 +116,7 @@ resource "google_bigquery_data_transfer_config" "standard_blocklevel_update" {
   destination_dataset_id = var.bq_dataset_id
   location               = var.bq_location
   project                = var.project_id
-  schedule               = "every day 04:00"
+  schedule               = "every day 07:00"
 
   params = {
     query = templatefile("${path.module}/../../../queries/standard_blocklevel_update.sql.tpl", {
@@ -136,7 +136,7 @@ resource "google_bigquery_data_transfer_config" "extended_blocklevel_update" {
   destination_dataset_id = var.bq_dataset_id
   location               = var.bq_location
   project                = var.project_id
-  schedule               = "every day 06:00"
+  schedule               = "every day 10:00"
 
   params = {
     query = templatefile("${path.module}/../../../queries/extended_blocklevel_update.sql.tpl", {
@@ -156,7 +156,7 @@ resource "google_bigquery_data_transfer_config" "longtail_blocklevel_update" {
   destination_dataset_id = var.bq_dataset_id
   location               = var.bq_location
   project                = var.project_id
-  schedule               = "every day 09:00"
+  schedule               = "every day 13:00"
 
   params = {
     query = templatefile("${path.module}/../../../queries/longtail_blocklevel_update.sql.tpl", {
