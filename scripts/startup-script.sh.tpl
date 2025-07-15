@@ -70,9 +70,9 @@ sudo -u bitcoin /home/bitcoin/project/venv/bin/python -m pip install --quiet goo
 # Require only for Option 2 : 
 sudo -u bitcoin /home/bitcoin/project/venv/bin/python -m pip install --quiet fastavro google-cloud-storage
 
-# # ----------------------------------------------
-# # Option 1 : Send messages straight to Bigquery
-# # ----------------------------------------------
+# # ----------------------------------------------------------
+# # Option 1 : Send messages straight to Bigquery using pubsub
+# # ----------------------------------------------------------
 
 # # ----------------------------------------
 # # Download mempool_watcher.py from GCS
