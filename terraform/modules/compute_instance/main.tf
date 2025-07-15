@@ -23,12 +23,22 @@ resource "google_compute_instance" "bitcoin_jungle_node" {
     goog-ec-src = "vm_add-tf"
   }
 
+  # # Option 1 : Send messages straight to Bigquery 
+  # metadata = {
+  #   enable-osconfig           = "TRUE"
+  #   startup-script            = templatefile(var.startup-script-option1, {
+  #     PROJECT_ID              = var.project_id,
+  #     TOPIC_ID                = var.pubsub_topic_name,
+  #     BUCKET_NAME             = var.infra_scripts_bucket_name
+  #     BUCKET_NAME_DESTINATION = var.auto_archive_bucket_name
+  #     HOSTNAME                = var.hostname
+  #   })
+  # }
+  # If no option 1, use this :
   metadata = {
     enable-osconfig           = "TRUE"
     startup-script            = templatefile(var.startup_script_tpl, {
       PROJECT_ID              = var.project_id,
-      # # Option 1 : Send messages straight to Bigquery 
-      # TOPIC_ID                = var.pubsub_topic_name,
       BUCKET_NAME             = var.infra_scripts_bucket_name
       BUCKET_NAME_DESTINATION = var.auto_archive_bucket_name
       HOSTNAME                = var.hostname

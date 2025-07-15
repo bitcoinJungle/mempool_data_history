@@ -24,6 +24,12 @@ variable "project_id" {
 #   type        = string
 # }
 
+# # Option 1 : Send messages straight to Bigquery 
+# variable "startup-script-option1" {
+#   description = "Path to the startup script template"
+#   type        = string
+# }
+
 variable "infra_scripts_bucket_name" {
   description = "GCS bucket where the startup script reads from"
   type        = string

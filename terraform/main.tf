@@ -65,6 +65,7 @@ module "compute_instance" {
   project_id                = var.project_id
   # # Option 1 : Send messages straight to Bigquery 
   # pubsub_topic_name       = module.pubsub.topic_name
+  # startup-script-option1  = "${path.module}/../scripts/startup-script-option1.sh.tpl"
   infra_scripts_bucket_name = module.buckets.infra_scripts_bucket_name
   auto_archive_bucket_name  = module.buckets.auto_archive_bucket_name
   subnetwork_id             = var.subnetwork_id
