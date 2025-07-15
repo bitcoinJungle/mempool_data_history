@@ -6,6 +6,7 @@
   { "name": "peer_num",       "type": "INTEGER",   "mode": "NULLABLE" },
   { "name": "pool_size_txns", "type": "INTEGER",   "mode": "NULLABLE" },
   { "name": "pool_size_kb",   "type": "INTEGER",   "mode": "NULLABLE" },
+  { "name": "replace_txhash", "type": "STRING",    "mode": "NULLABLE" },
   { "name": "source",         "type": "STRING",    "mode": "NULLABLE" },
   { "name": "dt",             "type": "DATE",      "mode": "NULLABLE" }
 ]

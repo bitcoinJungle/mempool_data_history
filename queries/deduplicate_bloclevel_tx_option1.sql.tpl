@@ -8,10 +8,22 @@ USING (
            CURRENT_TIMESTAMP() AS deduplicated_at,
            CURRENT_TIMESTAMP() AS modified_at,
            CURRENT_TIMESTAMP() AS created_at
-    FROM ${project_id}.${dataset_id}.${avro_table} 
-    WHERE source = "bmon"
-      AND dt = DATE_SUB(CURRENT_DATE(), INTERVAL 1 DAY) -- We work on yesterday's data
-    GROUP BY txhash
+      FROM (
+         -- First table: avrofiles source
+        SELECT txhash, `timestamp` AS node_timestamp
+          FROM ${project_id}.${dataset_id}.${avro_table} e
+         WHERE e.source = "bmon"
+          AND dt = DATE_SUB(CURRENT_DATE(), INTERVAL 1 DAY) -- We work on yesterday's data
+        
+        UNION ALL
+  
+        -- Second table: BitcoinJungle GCP node source
+        SELECT txhash, `timestamp` AS node_timestamp
+        FROM ${project_id}.${dataset_id}.${accepted_tx_table} 
+        WHERE
+          dt = DATE_SUB(CURRENT_DATE(), INTERVAL 1 DAY) -- We work on yesterday's data.
+      )
+     GROUP BY txhash
 ) AS source
 ON target.txid = source.txid
 

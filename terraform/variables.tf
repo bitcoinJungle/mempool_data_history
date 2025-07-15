@@ -60,13 +60,19 @@ variable "service_account_email" {
   type        = string
 }
 
-variable "pubsub_topic_name" {
-  description = "The name of the Pub/Sub topic"
-  type        = string
-  default     = "mempool_topic"
-}
+# # Option 1 : Send messages straight to Bigquery 
+# variable "pubsub_topic_name" {
+#   description = "The name of the Pub/Sub topic"
+#   type        = string
+#   default     = "mempool_topic"
+# }
 
 variable "scripts_bucket_name" {
   description = "GCS bucket name for startup scripts"
+  type        = string
+}
+
+variable "hostname" {
+  description = "hostname of the VM"
   type        = string
 }

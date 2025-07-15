@@ -40,6 +40,7 @@ mempool_activity_avro_schema = parse_schema({
         {"name": "peer_num", "type": ["null", "int"]},
         {"name": "pool_size_txns", "type": ["null", "int"]},
         {"name": "pool_size_kb", "type": ["null", "int"]},
+        {"name": "replace_txhash", "type": ["null", "string"]},
     ],
 })
 
@@ -50,6 +51,10 @@ pattern = re.compile(
     r'^(?P<timestamp>\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.\d+Z).*?'
     r'peer=(?P<peer_num>\d+): accepted (?P<txhash>[a-f0-9]{64}).*?'
     r'poolsz (?P<pool_size_txns>\d+) txn, (?P<pool_size_kb>\d+) kB'
+)
+
+replacement_info_pattern = re.compile(
+    r'replacing mempool tx (?P<old_tx>[A-Fa-f0-9]{64}).*?New tx (?P<new_tx>[A-Fa-f0-9]{64})'
 )
 
 # --------------------------
@@ -107,6 +112,8 @@ def main():
     buffer = []
     flush_interval = 3600  # seconds
     last_flush = time.time()
+    
+    recent_replacements = {}  # new_txhash => old_txhash
 
     with open(LOG_FILE, 'r') as f:
         f.seek(0, 2)  # Seek to end
@@ -116,19 +123,33 @@ def main():
             if not line:
                 time.sleep(0.1)
                 continue
+            
+            # Match replacement info first
+            replacement_info = replacement_info_pattern.search(line)
+            if replacement_info:
+                old_tx = replacement_info.group("old_tx")
+                new_tx = replacement_info.group("new_tx")
+                recent_replacements[new_tx] = old_tx
+                continue
 
+            # Match accept to mempool log
             match = pattern.search(line)
             if match:
                 data = match.groupdict()
                 dt_obj = datetime.strptime(data["timestamp"], "%Y-%m-%dT%H:%M:%S.%fZ")
+                
+                txid = data["txhash"]
+                replace_txhash = recent_replacements.pop(txid, None)
+                
                 record = {
                     "event_type": "mempool_accept",
                     "host": HOSTNAME,
                     "timestamp": int(dt_obj.timestamp() * 1_000_000),
-                    "txhash": data["txhash"],
+                    "txhash": txid,
                     "peer_num": int(data["peer_num"]),
                     "pool_size_txns": int(data["pool_size_txns"]),
                     "pool_size_kb": int(data["pool_size_kb"]),
+                    "replace_txhash": replace_txhash,
                 }
                 buffer.append(record)
 

@@ -24,22 +24,23 @@ resource "google_bigquery_table" "external_avro_table" {
   }
 }
 
-# Create the table that will be used by the pub/sub
-resource "google_bigquery_table" "accepted_tx" {
-  dataset_id          = google_bigquery_dataset.mempool_dataset.dataset_id
-  table_id            = "accepted_tx"
-  deletion_protection = false
-  schema              = file(var.schema_file)
+# # Option 1 : Send messages straight to Bigquery
+# # Create the table that will be used by the pub/sub
+# resource "google_bigquery_table" "accepted_tx" {
+#   dataset_id          = google_bigquery_dataset.mempool_dataset.dataset_id
+#   table_id            = "accepted_tx"
+#   deletion_protection = false
+#   schema              = file(var.schema_file)
 
-  # Partition the table by the DATE column "dt"
-  time_partitioning {
-    type  = "DAY"
-    field = "dt"
+#   # Partition the table by the DATE column "dt"
+#   time_partitioning {
+#     type  = "DAY"
+#     field = "dt"
 
-    # (optional) require queries to filter on the partition column
-    # require_partition_filter = true
-  }
-}
+#     # (optional) require queries to filter on the partition column
+#     # require_partition_filter = true
+#   }
+# }
 
 # Create the table that will be used to deduplicate tx and join them to the blockchain data
 resource "google_bigquery_table" "bloclevel_tx" {
@@ -64,14 +65,25 @@ resource "google_bigquery_data_transfer_config" "deduplication_tx" {
   project                = var.project_id
   schedule               = "every day 02:00"
 
+  # # Option 1 : Send messages straight to Bigquery
+  # params = {
+  #   query = templatefile("${path.module}/../../../queries/deduplicate_bloclevel_tx_option1.sql.tpl", {
+  #     project_id         = var.project_id,
+  #     dataset_id         = var.bq_dataset_id,
+  #     bloclevel_table    = google_bigquery_table.bloclevel_tx.table_id
+  #     avro_table         = google_bigquery_table.external_avro_table.table_id
+  #     accepted_tx_table  = google_bigquery_table.accepted_tx.table_id
+  #   })
+  #
+  # If not option 1 : 
   params = {
     query = templatefile("${path.module}/../../../queries/deduplicate_bloclevel_tx.sql.tpl", {
       project_id         = var.project_id,
       dataset_id         = var.bq_dataset_id,
       bloclevel_table    = google_bigquery_table.bloclevel_tx.table_id
       avro_table         = google_bigquery_table.external_avro_table.table_id
-      accepted_tx_table  = google_bigquery_table.accepted_tx.table_id
     })
+
   }
 
   service_account_name = var.service_account_email

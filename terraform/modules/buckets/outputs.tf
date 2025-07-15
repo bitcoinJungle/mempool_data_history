@@ -13,14 +13,15 @@ output "avro_files_dependency" {
   value       = google_storage_bucket_object.avro_files
 }
 
-output "mempool_watcher_script_dependency" {
-  description = "Dependency object for the mempool_watcher script"
-  value       = google_storage_bucket_object.mempool_watcher_script
-}
+# # Option 1 : Send messages straight to Bigquery
+# output "mempool_watcher_script_dependency" {
+#   description = "Dependency object for the mempool_watcher script"
+#   value       = google_storage_bucket_object.mempool_watcher_script
+# }
 
 output "mempool_avro_watcher_script_dependency" {
   description = "Dependency object for the mempool_watcher script"
-  value       = google_storage_bucket_object.mempool_watcher_script
+  value       = google_storage_bucket_object.mempool_avro_watcher_script
 }
 
 output "vm_can_read_scripts_dependency" {

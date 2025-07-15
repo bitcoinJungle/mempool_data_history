@@ -17,11 +17,12 @@ resource "google_storage_bucket" "infra_scripts_bucket" {
   }
 }
 
-resource "google_storage_bucket_object" "mempool_watcher_script" {
-  name   = "scripts/mempool_watcher.py"
-  bucket = google_storage_bucket.infra_scripts_bucket.name
-  source = var.mempool_watcher_script_source
-}
+# # Option 1 : Send messages straight to Bigquery
+# resource "google_storage_bucket_object" "mempool_watcher_script" {
+#   name   = "scripts/mempool_watcher.py"
+#   bucket = google_storage_bucket.infra_scripts_bucket.name
+#   source = var.mempool_watcher_script_source
+# }
 
 resource "google_storage_bucket_object" "mempool_avro_watcher_script" {
   name   = "scripts/mempool_to_avrofiles_watcher.py"

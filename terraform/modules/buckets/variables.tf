@@ -12,11 +12,11 @@ variable "bucket_location" {
   description = "GCP location for the buckets"
   type        = string
 }
-
-variable "mempool_watcher_script_source" {
-  description = "Local path to the mempool_watcher.py script"
-  type        = string
-}
+# # Option 1 : Send messages straight to Bigquery
+# variable "mempool_watcher_script_source" {
+#   description = "Local path to the mempool_watcher.py script"
+#   type        = string
+# }
 
 variable "mempool_to_avrofiles_watcher_script_source" {
   description = "Local path to the mempool_to_avrofiles_watcher.py script"

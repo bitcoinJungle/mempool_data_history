@@ -18,12 +18,18 @@ variable "project_id" {
   type        = string
 }
 
-variable "pubsub_topic_name" {
-  description = "Pub/Sub topic name passed to the startup script"
+# # Option 1 : Send messages straight to Bigquery 
+# variable "pubsub_topic_name" {
+#   description = "Pub/Sub topic name passed to the startup script"
+#   type        = string
+# }
+
+variable "infra_scripts_bucket_name" {
+  description = "GCS bucket where the startup script reads from"
   type        = string
 }
 
-variable "infra_scripts_bucket_name" {
+variable "auto_archive_bucket_name" {
   description = "GCS bucket where the startup script reads from"
   type        = string
 }
@@ -45,5 +51,10 @@ variable "scopes" {
 
 variable "zone" {
   description = "GCP zone for the instance"
+  type        = string
+}
+
+variable "hostname" {
+  description = "hostname of the instance"
   type        = string
 }
