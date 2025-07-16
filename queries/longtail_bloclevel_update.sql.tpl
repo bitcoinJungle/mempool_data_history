@@ -1,3 +1,12 @@
+DECLARE latest_block_height INT64;
+
+-- Get the latest block height for longtail_blocklevel_update
+SET latest_block_height = (
+  SELECT MAX(block_height)
+  FROM ${project_id}.${dataset_id}.${bloclevel_table}
+  WHERE aggregated_by = "longtail_blocklevel_update"
+);
+
 UPDATE ${project_id}.${dataset_id}.${bloclevel_table} AS a
 SET
   block_timestamp = t.block_timestamp,
@@ -15,10 +24,7 @@ WHERE a.block_timestamp IS NULL
   AND a.replaced_by IS NULL
   AND a.deduplicated_at IS NOT NULL  
   AND DATE(a.last_seen_timestamp) = DATE_SUB(CURRENT_DATE(), INTERVAL 8 DAY) 
-  AND (
-    (SELECT MAX(block_height) FROM ${project_id}.${dataset_id}.${bloclevel_table} WHERE aggregated_by = "longtail_blocklevel_update") IS NULL
-    OR t.block_number >= (SELECT MAX(block_height) FROM ${project_id}.${dataset_id}.${bloclevel_table} WHERE aggregated_by = "longtail_blocklevel_update")
-  )
+  AND (latest_block_height IS NULL OR t.block_number >= latest_block_height)
   AND a.txid = t.hash
                  --  REPLACE THAT BY A FILTER ON deduplicated_at NOT NULL BUT aggregated_at NULL ? INSTEAD FOR 'RETRIEVED MODE IN CASE OF ISSUE'
   AND t.block_timestamp BETWEEN TIMESTAMP_ADD(a.last_seen_timestamp, INTERVAL 24 HOUR) AND TIMESTAMP_ADD(a.last_seen_timestamp, INTERVAL 7 DAY);  
