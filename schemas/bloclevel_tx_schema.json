@@ -8,11 +8,10 @@
   { "name": "virtual_size",         "type": "INTEGER",   "mode": "NULLABLE" },
   { "name": "output_value",         "type": "INTEGER",   "mode": "NULLABLE" },
   { "name": "fee",                  "type": "INTEGER",   "mode": "NULLABLE" },
-  { "name": "replaced_by",           "type": "STRING",    "mode": "NULLABLE" },
+  { "name": "replaced_by",          "type": "STRING",    "mode": "NULLABLE" },
   { "name": "deduplicated_at",      "type": "TIMESTAMP", "mode": "REQUIRED" },
   { "name": "aggregated_at",        "type": "TIMESTAMP", "mode": "NULLABLE" },
   { "name": "aggregated_by",        "type": "STRING",    "mode": "NULLABLE" },
   { "name": "modified_at",          "type": "TIMESTAMP", "mode": "REQUIRED" },
   { "name": "created_at",           "type": "TIMESTAMP", "mode": "REQUIRED" }
 ]
-

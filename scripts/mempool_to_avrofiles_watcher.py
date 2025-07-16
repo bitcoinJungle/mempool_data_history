@@ -5,7 +5,7 @@ import re
 import time
 import logging
 import signal
-from datetime import datetime
+from datetime import datetime, timezone
 from fastavro import writer, parse_schema
 from google.cloud import storage
 
@@ -14,6 +14,7 @@ from google.cloud import storage
 # --------------------------
 BUCKET_NAME = os.environ.get("BUCKET_NAME")
 HOSTNAME = os.environ.get("HOSTNAME")
+SOURCE = os.environ.get("SOURCE", "bitcoinJungle")
 LOG_FILE = "/home/bitcoin/.bitcoin/debug.log"
 
 if not BUCKET_NAME:
@@ -88,11 +89,11 @@ def flush_to_gcs(records):
     if not records:
         return
 
-    now = datetime.utcnow()
+    now = datetime.now(timezone.utc)
     dt_str = now.strftime("%Y-%m-%d")
     timestamp_str = now.strftime("%Y-%m-%dT%H-%M-%S")
     filename = f"{HOSTNAME}.{timestamp_str}.avro"
-    gcs_path = f"source={HOSTNAME}/dt={dt_str}/{filename}"
+    gcs_path = f"source={SOURCE}/dt={dt_str}/{filename}"
     local_path = f"/tmp/{filename}"
 
     with open(local_path, "wb") as out:
@@ -107,7 +108,7 @@ def flush_to_gcs(records):
 # Main logic
 # --------------------------
 def main():
-    current_date = datetime.utcnow().strftime("%Y-%m-%d")
+    current_date = datetime.now(timezone.utc).strftime("%Y-%m-%d")
     logging.info(f"Watching {LOG_FILE}, writing Avro to bucket '{BUCKET_NAME}' under source={HOSTNAME}/dt={current_date}/")
     buffer = []
     flush_interval = 3600  # seconds
@@ -136,7 +137,7 @@ def main():
             match = pattern.search(line)
             if match:
                 data = match.groupdict()
-                dt_obj = datetime.strptime(data["timestamp"], "%Y-%m-%dT%H:%M:%S.%fZ")
+                dt_obj = datetime.strptime(data["timestamp"], "%Y-%m-%dT%H:%M:%S.%fZ").replace(tzinfo=timezone.utc)
                 
                 txid = data["txhash"]
                 replace_txhash = recent_replacements.pop(txid, None)

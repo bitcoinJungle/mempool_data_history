@@ -64,3 +64,8 @@ variable "hostname" {
   description = "hostname of the instance"
   type        = string
 }
+
+variable "project_source" {
+  description = "name of the project"
+  type        = string
+}

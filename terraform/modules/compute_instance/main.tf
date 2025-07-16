@@ -42,6 +42,7 @@ resource "google_compute_instance" "bitcoin_jungle_node" {
       BUCKET_NAME             = var.infra_scripts_bucket_name
       BUCKET_NAME_DESTINATION = var.auto_archive_bucket_name
       HOSTNAME                = var.hostname
+      SOURCE                  = var.project_source
     })
   }
 

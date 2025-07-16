@@ -72,6 +72,7 @@ module "compute_instance" {
   service_account_email     = var.service_account_email
   zone                      = var.zone
   hostname                  = var.hostname
+  project_source            = "bitcoinJungle"
   scopes = [
     "https://www.googleapis.com/auth/devstorage.read_only",
     "https://www.googleapis.com/auth/logging.write",
