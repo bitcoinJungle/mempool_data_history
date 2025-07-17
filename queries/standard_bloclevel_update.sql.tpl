@@ -3,12 +3,12 @@ DECLARE latest_block_height INT64;
 -- Get the latest block height for standard_blocklevel_update
 SET latest_block_height = (
   SELECT MAX(block_height)
-  FROM ${project_id}.${dataset_id}.${bloclevel_table}
+  FROM `${project_id}.${dataset_id}.${bloclevel_table}`
   WHERE aggregated_by = "standard_blocklevel_update"
 );
 
 -- Perform the update using the stored value
-UPDATE ${project_id}.${dataset_id}.${bloclevel_table} AS a
+UPDATE `${project_id}.${dataset_id}.${bloclevel_table}` AS a
 SET
   block_timestamp = t.block_timestamp,
   block_height = t.block_number,

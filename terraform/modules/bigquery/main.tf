@@ -113,7 +113,6 @@ resource "google_bigquery_data_transfer_config" "flag_replaced_tx" {
 resource "google_bigquery_data_transfer_config" "standard_bloclevel_update" {
   display_name           = "Update bloclevel_tx with blockchain data"
   data_source_id         = "scheduled_query"
-  destination_dataset_id = var.bq_dataset_id
   location               = var.bq_location
   project                = var.project_id
   schedule               = "every day 07:00"
@@ -133,7 +132,6 @@ resource "google_bigquery_data_transfer_config" "standard_bloclevel_update" {
 resource "google_bigquery_data_transfer_config" "extended_bloclevel_update" {
   display_name           = "Extended update bloclevel_tx with blockchain data"
   data_source_id         = "scheduled_query"
-  destination_dataset_id = var.bq_dataset_id
   location               = var.bq_location
   project                = var.project_id
   schedule               = "every day 10:00"
@@ -153,7 +151,6 @@ resource "google_bigquery_data_transfer_config" "extended_bloclevel_update" {
 resource "google_bigquery_data_transfer_config" "longtail_bloclevel_update" {
   display_name           = "Longtailed update bloclevel_tx with blockchain data"
   data_source_id         = "scheduled_query"
-  destination_dataset_id = var.bq_dataset_id
   location               = var.bq_location
   project                = var.project_id
   schedule               = "every day 13:00"
