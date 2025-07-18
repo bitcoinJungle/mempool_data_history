@@ -59,7 +59,7 @@ These queries attempt to match mempool transactions to blockchain data:
 - `extended_bloclevel_update.sql.tpl`
 - `longtail_bloclevel_update.sql.tpl`
 
-The logic is nearly the same across them, but the **time window** for matching varies to optimize for cost and freshness:
+The logic is nearly the same across them, but the **time window** for matching varies to optimize for cost :
 
 - **Standard**: checks if the transaction was mined within 1 hour after it was last seen.
 - **Extended**: expands the window to 24 hours.
@@ -140,7 +140,7 @@ hostname                    = "b-01.slug"
 
 #### ⚠️ VM Sizing Note
 
-The default machine type is `n2d-standard-8`, which syncs the Bitcoin blockchain (IBD) in roughly 10 hours. You can select a cheaper VM type in th main.tf, this will cause the initial sync to take longer.
+The default machine type is `n2d-standard-8`, which syncs the Bitcoin blockchain (IBD) in roughly 10 hours. You can select a cheaper VM type in the main.tf, this will cause the initial sync to take longer.
 
 #### 🚀 Deploy
 
