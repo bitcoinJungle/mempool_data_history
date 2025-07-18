@@ -66,8 +66,7 @@ EOF
 # ----------------------------------------
 sudo -u bitcoin python3 -m venv /home/bitcoin/project/venv
 sudo -u bitcoin /home/bitcoin/project/venv/bin/python -m pip install --quiet --upgrade pip
-sudo -u bitcoin /home/bitcoin/project/venv/bin/python -m pip install --quiet google-cloud-pubsub
-# Require only for Option 2 : 
+# Require only for Option 1 : sudo -u bitcoin /home/bitcoin/project/venv/bin/python -m pip install --quiet google-cloud-pubsub
 sudo -u bitcoin /home/bitcoin/project/venv/bin/python -m pip install --quiet fastavro google-cloud-storage
 
 # ---------------------------------------------
