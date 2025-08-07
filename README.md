@@ -2,6 +2,8 @@
 
 This project sets up a data pipeline to collect, process, and enrich mempool data from Bitcoin Core, and organizing it at a block level for deeper analysis.
 
+![](./images/archi_mempool_project.webp)
+
 ## Project Structure
 
 The pipeline is split into two main parts:
